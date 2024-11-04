@@ -76,9 +76,9 @@ Text:
 
 # Branch to route based on experience type
 branch = RunnableBranch(
-    (lambda x: "airline_negative" in x["exp_type"].lower(), airline_negative_chain),
-    (lambda x: "non_fault_airline_negative" in x["exp_type"].lower(), non_airline_negative_chain),
-    (lambda x: "positive" in x["exp_type"].lower(), positive_chain),
+    (lambda x: x["exp_type"].strip().lower() == "airline_negative", airline_negative_chain),
+    (lambda x: x["exp_type"].strip().lower() == "non_fault_airline_negative", non_airline_negative_chain),
+    (lambda x: x["exp_type"].strip().lower() == "positive", positive_chain),
     main_chain
 )
 
