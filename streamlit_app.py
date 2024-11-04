@@ -28,6 +28,8 @@ You are a travel agent specializing in customer experience. Based on the provide
 2) "non_fault_airline_negative" if the user had a negative experience that was not the airline's fault.
 3) "positive" if the user had a positive experience.
 
+Provide only the result, with no additional explanation.
+
 Text:
 {experience_user}
 """
@@ -83,8 +85,12 @@ branch = RunnableBranch(
 # Combine chains
 full_chain = {"exp_type": flight_chain, "text": lambda x: x["experience_user"]} | branch
 
-# Get the response
-response = full_chain.invoke({"experience_user": prompt})
+# Debugging: Log the classification output
+classification = flight_chain.invoke({"experience_user": prompt})
+st.write("Classification result:", classification)  # Display the classification result for debugging
+
+# Get the response based on classification
+response = branch.invoke({"exp_type": classification, "experience_user": prompt})
 
 # Display response
 st.write(response.content)
