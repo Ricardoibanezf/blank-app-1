@@ -82,15 +82,12 @@ branch = RunnableBranch(
     main_chain
 )
 
-# Combine chains
-full_chain = {"exp_type": flight_chain, "text": lambda x: x["experience_user"]} | branch
-
-# Debugging: Log the classification output
+# Get the classification type
 classification = flight_chain.invoke({"experience_user": prompt})
 st.write("Classification result:", classification)  # Display the classification result for debugging
 
-# Get the response based on classification
-response = branch.invoke({"exp_type": classification, "experience_user": prompt})
+# Get the response based on classification and original prompt
+response = branch.invoke({"exp_type": classification, "text": prompt})
 
 # Display response
 st.write(response.content)
